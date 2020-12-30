@@ -68,7 +68,7 @@ server.known_users_by_name = {
   "emmy":660669670675841044
 }
 
-Debug = False
+Debug = True
 
 if Debug:
   ###########DEBUG_SERVER_SPECFIC_###############################################################
@@ -80,6 +80,7 @@ if Debug:
   #specfic chat rooms
   server.server_general = 698637841663656006
   server.watchtower_id = 698637841663656006
+  server.admin_room = 698637841663656006
   server.watchtower_scan_timer = 99999999
   server.radar_on = False
 
@@ -104,6 +105,7 @@ if not Debug:
   #specfic chat rooms
   server.server_general = 675868982414278660
   server.watchtower_id = 681937121015234565
+  server.admin_room = 734514010522779679
   server.watchtower_scan_timer = 3600/4
   server.radar_on = True
 
