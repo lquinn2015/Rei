@@ -26,14 +26,14 @@ class fun(commands.Cog):
             await ctx.send("Remember to mention someone!")
 
     @commands.command(name = "avatar")
-    async def avatar_cmd(ctx, self):
+    async def avatar_cmd(self, ctx):
         member = ctx.guild.get_member(ctx.message.mentions[0].id if len(ctx.message.mentions) > 0 else ctx.author.id)
         embed = discord.Embed(title=f"{member}s Avatar:")
         embed.set_image(url=member.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(name = "pat")
-    async def headpat_cmd(ctx, self):
+    async def headpat_cmd(self, ctx):
         embed = discord.Embed(description="*You hear a distant purring*")
         if len(ctx.message.mentions) > 0:
             embed.title = f"*{ctx.message.mentions[0]} gets patted by {ctx.author}*"
@@ -43,7 +43,7 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name = "wink")
-    async def wink_cmd(ctx, self):
+    async def wink_cmd(self, ctx):
         embed = discord.Embed()
         if len(ctx.message.mentions) > 0:
             embed.title = f"*{ctx.message.mentions[0]} gets winked at by {ctx.author}*"
@@ -53,7 +53,7 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @command.command(name = "boop")
-    async def boop_cmd(ctx, self):
+    async def boop_cmd(self, ctx):
         embed = discord.Embed()
         if len(ctx.message.mentions) > 0:
             embed.title = f"*{ctx.author} boops {ctx.message.mentions[0]}*"
@@ -63,7 +63,7 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @command.command(name = "slap")
-    async def slap_cmd(ctx, self):
+    async def slap_cmd(self, ctx):
         embed = discord.Embed()
         if len(ctx.message.mentions) > 0:
             embed.title = f"*{ctx.message.mentions[0]} gets slapped by {ctx.author}*"
@@ -73,7 +73,7 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @command.command(name = "dance")
-    async def dance_cmd(ctx):
+    async def dance_cmd(self, ctx):
         embed = discord.Embed()
         if len(ctx.message.mentions) > 0:
             embed.title = f"*{ctx.author} dances with {ctx.message.mentions[0]}*"
