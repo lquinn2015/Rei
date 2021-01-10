@@ -25,7 +25,7 @@ bot = commands.Bot(
 @bot.event
 async def on_ready():
   print(f'Logged in as {bot.user.name} - {bot.user.id}')
-  bot.remove_command('help')
+  # bot.remove_command('help')
   bot.custom_name = "Emmy"
   for cog in cogs:
     bot.load_extension(cog)
