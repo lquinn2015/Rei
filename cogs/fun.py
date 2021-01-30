@@ -3,6 +3,7 @@ import discord
 from server import server
 import random
 import json, requests
+from fuzzywuzzy import process
 
 
 class fun(commands.Cog):
@@ -86,6 +87,26 @@ class fun(commands.Cog):
             embed.title = f"*{ctx.author} dances*"
         embed.set_image(url=requests.get("https://api.tenor.com/v1/search?q=dance+anime&key=LIVDSRZULELA&limit=15").json()['results'][random.randint(0, 14)]['media'][0]['gif']['url'])
         await ctx.send(embed=embed)
+        
+        
+    @commands.command(name = "role", help = "enter the role name you would like ^_^"))
+    async def role_cmd(self, ctx, content:str):
+        if len(contents) != 0 and isinstance(content, basestring):
+            events = self.bot.get_role(805050701717307412)
+            #to add more roles, add another get_role, and then add it to the role_dict below
+            role_dict = {"events": events}
+            content = process.extractOne(content, list(role_dict.keys()))
+            if content[1] > 60:
+                role = role_dict[content[0])
+                if role in ctx.author.roles:
+                    await ctx.author.remove_roles(role)
+                    await ctx.send("Removed role " + content[0])
+                else:
+                    await ctx.author.add_roles(role)
+                    await ctx.send("Added role " + content[0])
+            else:
+                await ctx.send("I'm sorry, I don't understand your input")
+                                 
 
 def setup(bot):
   mod = fun(bot)
