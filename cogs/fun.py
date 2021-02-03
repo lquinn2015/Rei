@@ -3,7 +3,7 @@ import discord
 from server import server
 import random
 import json, requests
-from fuzzywuzzy import process
+from fuzzywuzzy import process 
 
 
 class fun(commands.Cog):
@@ -89,15 +89,16 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
         
         
-    @commands.command(name = "role", help = "enter the role name you would like ^_^"))
+    @commands.command(name = "role", help = "enter the role name you would like ^_^")
     async def role_cmd(self, ctx, content:str):
-        if len(contents) != 0 and isinstance(content, basestring):
-            events = self.bot.get_role(805050701717307412)
-            #to add more roles, add another get_role, and then add it to the role_dict below
-            role_dict = {"events": events}
+        if len(content) != 0 and isinstance(content, str):
+            role_dict = {}
+            for x in server.server_roles:
+              role_dict[x] = ctx.guild.get_role(server.server_roles[x])
+            #to add more roles, add another get_role, and then add it to the role_dict below 
             content = process.extractOne(content, list(role_dict.keys()))
             if content[1] > 60:
-                role = role_dict[content[0])
+                role = role_dict[content[0]]
                 if role in ctx.author.roles:
                     await ctx.author.remove_roles(role)
                     await ctx.send("Removed role " + content[0])
