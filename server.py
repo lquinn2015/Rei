@@ -99,7 +99,11 @@ if not Debug:
   #server ID
   server.server_id = 675868982414278656 
   #dictionary of command role ids we use
-  server.server_roles = {"visitor":675870214314917927} # K=role name, V=[role ids list or singular]
+  # NO ADMIN ROLES HERE IF I SPOT ONE I WILL REPORT AND YOU WILL HAVE A BAD DAY
+  server.server_roles = {"visitor":675870214314917927, "events":763868902077366373} # K=role name, V=[role ids list or singular]
+  
+  server.server_roles_private = {"visitor":675870214314917927, "events":763868902077366373} # K=role name, V=[role ids list or singular]
+
 
   #specfic chat rooms
   server.server_general = 675868982414278660
