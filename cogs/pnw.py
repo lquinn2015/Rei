@@ -51,11 +51,9 @@ class pwn(commands.Cog):
     if "http" not in args[1]:
       await ctx.send("Sorry please do rei, register @member link")
 
-    memId = int(args[0][3:-1])
-
+    memId = int(args[0].replace("!","")[2:-1])
     member = discord.utils.find(lambda m: m.id == memId, ctx.guild.members)
-    print(member)
-    print(memId)
+ 
     await self.insert_nationlink(args[0], args[1])
     name = member.nick
     if name is None:
@@ -77,11 +75,10 @@ class pwn(commands.Cog):
       return 
 
     record = await self.get_nationlink(args[0])
-    print(record)
     if record is None:
       return await ctx.send("I'm not sure i'm really sorry :(")
 
-    memId = int(args[0][3:-1])
+    memId = int(args[0].replace("!","")[2:-1])
     member = self.bot.get_user(memId)
 
     member = discord.utils.find(lambda m: m.id == memId, ctx.message.guild.members)
