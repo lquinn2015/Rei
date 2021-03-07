@@ -336,7 +336,6 @@ class pwn(commands.Cog):
       attacker = await self.get_nation(targetID)
     #defender = await self.get_nation(id2)
     defender = attacker
-    print(attacker)
     #attacker powers
     covert_active = 0
     
@@ -352,7 +351,10 @@ class pwn(commands.Cog):
 
     if "rcane" in defender['war_policy']:
       arcane_active = 1
-
+      await ctx.send("Arcane detected")
+    else:
+      await ctx.send("No Arcane")
+    
     safetylv = 1
     mins = 1
     currs = 1
@@ -378,7 +380,6 @@ class pwn(commands.Cog):
       attempts = 0
       while maxs - mins > 0 and attempts < 8:
         attempts += 1
-        print(currs)
         currs = (maxs + mins)/2
         ret = await self.ping_spys(targetID,safetylv,currs)
         if "Low" in ret:

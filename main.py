@@ -5,7 +5,7 @@ import heartbeat
 
 
 
-cogs = ['cogs.pnw', 'cogs.debug', 'cogs.chat_monitor', 'cogs.fun']
+cogs = ['cogs.pnw', 'cogs.debug', 'cogs.chat_monitor', 'cogs.fun', 'cogs.econ']
 
 def get_prefix(bot, msg):
   prefixs = ["Rachel, ", "rachel, ","Rei, ", "rei, "]
