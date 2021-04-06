@@ -3,6 +3,7 @@ import discord
 from server import server
 import functools
 import asyncio
+import MessageTempletes as MT
 
 
 class econ(commands.Cog):
@@ -60,44 +61,9 @@ class econ(commands.Cog):
         help_main["color"] = discord.Colour.green().value
         help_main["fields"] = help_fields
         help_embed = discord.Embed.from_dict(help_main)
-        
- 
-        pages = [help_embed] + command_pages
-        msg = None
+        pages = [help_embed] + command_pages + ["Random text here hello lossi"]
 
-        arrow_forward_emoji =  u'\U000027A1'
-        arrow_backward_emoji = u'\U00002B05'
-
-        def reaction_options(reaction, user):
-            
-            return user.id == ctx.author.id and msg.id == reaction.message.id and reaction.emoji in [arrow_forward_emoji, arrow_backward_emoji]
-        
-
-        idx = 0
-        while True:
-          
-            msg = await ctx.send(embed=pages[idx])
-
-            await msg.add_reaction(arrow_backward_emoji)
-            await msg.add_reaction(arrow_forward_emoji)
-
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=10, check=reaction_options)
-
-                if reaction.emoji == arrow_forward_emoji:
-                    idx = (idx + 1) % len(pages)
-                if reaction.emoji == arrow_backward_emoji:
-                    idx = (idx - 1 + len(pages)) % len(pages)
-                
-                await reaction.message.delete()
-                continue
-
-            except asyncio.TimeoutError:
-                await msg.clear_reaction(arrow_backward_emoji)
-                await msg.clear_reaction(arrow_forward_emoji)
-                break
-
-
+        await MT.paginator(self.bot, ctx, pages)
 
             
 

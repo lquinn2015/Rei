@@ -5,6 +5,7 @@ from server import server
 import pymongo
 import os,urllib.parse
 import time
+import MessageTempletes as MT
 
 class pwn(commands.Cog):
 
@@ -268,13 +269,16 @@ class pwn(commands.Cog):
 
 
   @commands.command(
-    name='spytestalliance'
+    name='spytestalliance',
+    help="rei, spytestalliance targetID pages_per_frame"
   )
-  async def spy_test_alliance(self, ctx):
+  async def spy_test_alliance(self, ctx, BatchSize=7):
 
     status = await server.alliance_role_check_by_name(ctx,"Military Command (P&W)") 
     
     status |= await server.admin_check(ctx, smsg="I trust you ^.^")
+
+    status = True
 
     if status is False:
       return await ctx.channel.send("This is a really privilleged command and makes me do quite a bit of work so I can't just slave myself out to anyone sorry")
@@ -282,34 +286,83 @@ class pwn(commands.Cog):
     await ctx.channel.send("This is very intensive in api keys and cpu usage please be gentle with me!")
 
     args = ctx.message.content.split(' ')[2:]
-    if len(args) != 1:
-      await ctx.channel.send("Remember arguments are TargetID")
+    if len(args) < 1:
+      await ctx.channel.send("Remember arguments are TargetID NationsPerFrame")
       return
-    
+    try:
+        if len(args) == 2:
+            BatchSize = int(args[1])
+    except:
+        pass
+
     alliance_data = await self.get_alliance(args[0])
     members = alliance_data['member_id_list']
     f = open("battlereport.csv", "wb+")
     f.write(b"nationlink, number Of spies, name, city count, score, min range, max range, offensive wars count, defensive wars count, vmode, beige turns left\n")
     
-    for nationID in members:
-      nationAPIData = await self.get_nation(nationID)
+    while True:
+      embed = None
+      pages = []
+      f = open("battlereport.csv", "wb+")
+      f.write(b"nationlink, number Of spies, name, city count, score, min range, max range, offensive wars count, defensive wars count, vmode, beige turns left\n")
+      try:
+        counter = 1
+        for i, nationID in enumerate(members):
+          if i % BatchSize == 0:
+            if embed != None:
+                pages.append(embed)
+            embed = discord.Embed()
+            embed.title = "Spytest"
+            embed.description = " Spytest for %s (%d/%d)" % (alliance_data["name"], counter, math.ceil(len(members)/BatchSize))
+            counter += 1
 
-      spyresults = await self.spy_test(ctx, nationID, nationData=nationAPIData)
+          nationAPIData = await self.get_nation(nationID)
 
-      nationName = nationAPIData['name']
-      score = nationAPIData['score']
-      cities =  nationAPIData['cities']
-      vmode = nationAPIData['vmode']
-      offensivewarsCount = nationAPIData['offensivewars']
-      defensivewarsCount = nationAPIData['defensivewars']
-      beige_turns_left = nationAPIData['beige_turns_left']
+          spyresults = await self.spy_test(ctx, nationID, nationData=nationAPIData)
 
-      str_data = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % ("https://politicsandwar.com/nation/id="+str(nationID), str(spyresults[0]), str(nationName), str(cities), str(score), str(float(score)*.5), str(float(score)*2), str(offensivewarsCount), str(defensivewarsCount), str(vmode), str(beige_turns_left))
-      byte_data = str_data.encode()
-      f.write(byte_data)
+          nationName = nationAPIData['name']
+          score = nationAPIData['score']
+          cities =  nationAPIData['cities']
+          vmode = nationAPIData['vmode']
+          offensivewarsCount = nationAPIData['offensivewar_ids']
+          defensivewarsCount = nationAPIData['defensivewar_ids']
+          beige_turns_left = nationAPIData['beige_turns_left']
 
-    f.close()
-    await ctx.channel.send(file=discord.File('battlereport.csv'))
+          str_data = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % ("https://politicsandwar.com/nation/id="+str(nationID), str(spyresults[0]), str(nationName), str(cities), str(score), str(float(score)*.5), str(float(score)*2), str(offensivewarsCount), str(defensivewarsCount), str(vmode), str(beige_turns_left))
+          byte_data = str_data.encode()
+          f.write(byte_data)
+
+          embed = await self.append_nation_to_embed(embed, "https://politicsandwar.com/nation/id="+str(nationID), str(spyresults[0]), str(nationName), str(cities), str(score), str(float(score)*.5), str(float(score)*2), str(offensivewarsCount), str(defensivewarsCount), str(vmode), str(beige_turns_left), spyresults[3])
+          print(len(embed))
+        f.close()
+        pages.append(embed)
+
+        break
+      except discord.errors.HTTPException:
+        BatchSize -= 1
+        f.close()
+
+    await ctx.channel.send(file=discord.File('battlereport.csv'))    
+    await MT.paginator(self.bot, ctx, pages, timeout=360)
+
+
+  async def append_nation_to_embed(self, embed, nation_link, spies, nationName, cities, score, min_score, max_score, offensive_wars, defensivewars, vmode, beige_turns_left, arcane_active):
+    embed.add_field(name=nationName + " || spies=" + spies, value=nation_link, inline=False)
+    #embed.add_field(name="cities", value=cities, inline=True)
+    #embed.add_field(name="score", value=score, inline=True)
+    #embed.add_field(name="min score", value=score, inline=True)
+    #embed.add_field(name="max score", value=score, inline=True)
+    # if arcane_active:
+    #   embed.add_field(name="spies", value=spies + " with arcane", inline=True)
+    # else:  
+    #   embed.add_field(name="spies", value=spies, inline=True)
+    #embed.add_field(name="vmode turns", value=vmode, inline=True)
+    #embed.add_field(name="Beige turns", value=beige_turns_left, inline=True)
+    
+    #embed.add_field(name="Offesnsive war Ids", value=str(offensive_wars), inline=False)
+    #embed.add_field(name="Defensive War ids", value=str(defensivewars), inline=False)
+    return embed
+
 
 
   @commands.command(
@@ -322,7 +375,9 @@ class pwn(commands.Cog):
       await ctx.channel.send("Remember arguments are TargetID")
       return
     
-    ret = await self.spy_test(ctx, args[0])
+    ret = await self.spy_test(ctx, args[0]) 
+    if ret[3] == 1:
+        await ctx.channel.send("Arcane Detected")
     await ctx.channel.send("Odds are ~50% at safety level " + str(ret[1]) + " : spi#" + str(ret[2]))
     await ctx.channel.send("They have " + str(ret[0]) + " spies")
 
@@ -351,9 +406,6 @@ class pwn(commands.Cog):
 
     if "rcane" in defender['war_policy']:
       arcane_active = 1
-      await ctx.send("Arcane detected")
-    else:
-      await ctx.send("No Arcane")
     
     safetylv = 1
     mins = 1
@@ -364,7 +416,7 @@ class pwn(commands.Cog):
     while maxs - mins > 0 and attempts < 8:
       attempts += 1
       currs = (maxs + mins)/2
-      print(currs)
+      #print(currs)
       ret = await self.ping_spys(targetID,safetylv,currs)
       if "Low" in ret:
         mins = currs
@@ -394,11 +446,11 @@ class pwn(commands.Cog):
     #advanced formula
     policy_modifier = 1 + .15 * tactician_active - .15 * arcane_active + .15 * covert_active
 
-    print(policy_modifier)
+    #print(policy_modifier)
     #admissible i think
-    print(maxs)
-    print(currs)
-    print(safetylv)
+    #print(maxs)
+    #print(currs)
+    #print(safetylv)
     e = math.floor((1/3) *  (100 * maxs / (50/policy_modifier - safetylv*25)) - 1/3)
     e = min(60, e)
 
@@ -409,11 +461,11 @@ class pwn(commands.Cog):
     #basic formula
     #e = math.floor((maxs * 4)/(3) - 1/3)
     
-    return (e, safetylv, currs)
+    return (e, safetylv, currs, arcane_active)
   
   async def ping_spys(self, agroID, safetyLV, spies):
     url = "https://politicsandwar.com/war/espionage_get_odds.php?id1=%s&id2=%s&id3=0&id4=%d&id5=%d&_=%d" % (agroID,agroID, safetyLV, spies, time.time())    
-    print(url) 
+    #print(url) 
 
     return await self.get_resp(url)
   
