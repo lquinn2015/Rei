@@ -75,7 +75,7 @@ class pwn(commands.Cog):
 
     args = ctx.message.content.split()[2:]
     if len(args) != 1:
-      if (not ("<" in ctx.message.content)) or (ctx.message.content.isnumeric() == False and (len(str(args[0])) > 7):
+      if (not ("<" in ctx.message.content)) or (args[0].isnumeric() == False):
         await ctx.send("Sorry please do rei, lookup @member or rei, lookup nationid")
         return
     else:
