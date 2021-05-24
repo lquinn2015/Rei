@@ -52,8 +52,7 @@ class server(object):
     for r in ctx.author.roles:
       if r.id == server.alliance_role_names[role_txt]:
         return True
-      else:
-        return False
+    return False
 
 
   
@@ -108,7 +107,7 @@ if not Debug:
   #specfic chat rooms
   server.server_general = 675868982414278660
   server.watchtower_id = 681937121015234565
-  server.watchtower_scan_timer = 3600/4
+  server.watchtower_scan_timer = 3600
   server.radar_on = True
 
   #identity controls

@@ -44,7 +44,7 @@ class pwn(commands.Cog):
       return
 
     args = ctx.message.content.split()[2:]
-    print(args)
+
     if not ( ("<" in ctx.message.content) and len(args) == 2):
       await ctx.send("Sorry please do rei, register @member link")
 
@@ -57,7 +57,6 @@ class pwn(commands.Cog):
     if("!" not in args[0]):
       args[0] = args[0][0:2] + "!" + args[0][2:]
 
-    print(args[0])
     await self.insert_nationlink(args[0], args[1])
     name = member.nick
     if name is None:
@@ -169,11 +168,6 @@ class pwn(commands.Cog):
       
         owars = nation["offensivewar_ids"]
         dwars = nation["defensivewar_ids"]
-        
-
-        print(nation['name'])
-        print(owars)
-        print(dwars)
         
         #report unlogged and add them to new logged list
         for war_id in owars:
@@ -336,7 +330,7 @@ class pwn(commands.Cog):
       attacker = await self.get_nation(targetID)
     #defender = await self.get_nation(id2)
     defender = attacker
-    print(attacker)
+
     #attacker powers
     covert_active = 0
     
@@ -362,7 +356,7 @@ class pwn(commands.Cog):
     while maxs - mins > 0 and attempts < 8:
       attempts += 1
       currs = (maxs + mins)/2
-      print(currs)
+
       ret = await self.ping_spys(targetID,safetylv,currs)
       if "Low" in ret:
         mins = currs
@@ -378,7 +372,7 @@ class pwn(commands.Cog):
       attempts = 0
       while maxs - mins > 0 and attempts < 8:
         attempts += 1
-        print(currs)
+
         currs = (maxs + mins)/2
         ret = await self.ping_spys(targetID,safetylv,currs)
         if "Low" in ret:
@@ -393,11 +387,9 @@ class pwn(commands.Cog):
     #advanced formula
     policy_modifier = 1 + .15 * tactician_active - .15 * arcane_active + .15 * covert_active
 
-    print(policy_modifier)
+
     #admissible i think
-    print(maxs)
-    print(currs)
-    print(safetylv)
+
     e = math.floor((1/3) *  (100 * maxs / (50/policy_modifier - safetylv*25)) - 1/3)
     e = min(60, e)
 
@@ -412,7 +404,7 @@ class pwn(commands.Cog):
   
   async def ping_spys(self, agroID, safetyLV, spies):
     url = "https://politicsandwar.com/war/espionage_get_odds.php?id1=%s&id2=%s&id3=0&id4=%d&id5=%d&_=%d" % (agroID,agroID, safetyLV, spies, time.time())    
-    print(url) 
+
 
     return await self.get_resp(url)
   
