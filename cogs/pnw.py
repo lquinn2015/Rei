@@ -266,10 +266,11 @@ class pwn(commands.Cog):
   )
   async def spy_test_alliance(self, ctx):
 
-    status = await server.alliance_role_check_by_name(ctx,"Military Command (P&W)") 
+    status = await server.alliance_role_check_by_name(ctx,"Military Command (P&W)")   
+    print(status)
+    if status is False:
+      status |= await server.admin_check(ctx, smsg="I trust you ^.^")
     
-    status |= await server.admin_check(ctx, smsg="I trust you ^.^")
-
     if status is False:
       return await ctx.channel.send("This is a really privilleged command and makes me do quite a bit of work so I can't just slave myself out to anyone sorry")
 
