@@ -92,11 +92,13 @@ if Debug:
 
 #alliance specfic
 server.pnw_id=7346
+server.pnw_alliance_ids = [7346, 4468] # CC, PFG
 
 if not Debug:
   ###########CHOCOLATE_CASTLE_SPECFIC###############################################################
   #server ID
   server.server_id = 675868982414278656 
+  
   #dictionary of command role ids we use
   # NO ADMIN ROLES HERE IF I SPOT ONE I WILL REPORT AND YOU WILL HAVE A BAD DAY
   server.server_roles = {"visitor":675870214314917927, "events":763868902077366373} # K=role name, V=[role ids list or singular]

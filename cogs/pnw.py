@@ -153,9 +153,16 @@ class pwn(commands.Cog):
       
       print("radar active")
 
-      alliance_data = await self.get_alliance()
-      members = alliance_data['member_id_list']
-   
+      
+      members = []
+      for x in server.pnw_alliance_ids:
+        alliance_data = await self.get_alliance(targetID=x)
+        members = members + alliance_data['member_id_list']
+      
+      #alliance_data = await self.get_alliance()
+      #members = alliance_data['member_id_list']
+
+
       active_wars = []
 
       for member_id in members:
@@ -477,3 +484,4 @@ def setup(bot):
   bot.add_cog(mod)
   if server.radar_on:
     bot.loop.create_task(mod.radar())
+
