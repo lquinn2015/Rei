@@ -101,7 +101,7 @@ if not Debug:
   
   #dictionary of command role ids we use
   # NO ADMIN ROLES HERE IF I SPOT ONE I WILL REPORT AND YOU WILL HAVE A BAD DAY
-  server.server_roles = {"visitor":675870214314917927, "events":763868902077366373} # K=role name, V=[role ids list or singular]
+  server.server_roles = {"visitor":675870214314917927, "events":763868902077366373, "politics":676166991576432653, "gura":773012387120807977} # K=role name, V=[role ids list or singular]
   
   server.server_roles_private = {"visitor":675870214314917927, "events":763868902077366373} # K=role name, V=[role ids list or singular]
 
