@@ -1,7 +1,7 @@
 """
 This is a stateless class and simply contains data used for the CC server its mean to be imported to different classes. This data is final do not change it outside of this class
 """
-
+import os
 
 
 class server(object):

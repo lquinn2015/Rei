@@ -41,5 +41,5 @@ from discord.ext import commands
 async def hallu(ctx):
   await ctx.send("test")
 
-heartbeat.start()
+#heartbeat.start()
 bot.run(os.environ["token"], bot=True, reconnect=True)
