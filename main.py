@@ -2,7 +2,9 @@ import discord
 from discord.ext import commands
 import os
 import heartbeat
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 cogs = ['cogs.pnw', 'cogs.debug', 'cogs.chat_monitor', 'cogs.fun']
