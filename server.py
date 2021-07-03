@@ -67,7 +67,8 @@ server.known_users_by_name = {
   "emmy":660669670675841044
 }
 
-Debug = os.environ["debug"]
+Debug = os.environ["debug"] == "True"
+print("Debug mode is " + str(Debug))
 
 if Debug:
   ###########DEBUG_SERVER_SPECFIC_###############################################################

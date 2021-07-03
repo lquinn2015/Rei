@@ -10,9 +10,13 @@ load_dotenv()
 cogs = ['cogs.pnw', 'cogs.debug', 'cogs.chat_monitor', 'cogs.fun']
 
 def get_prefix(bot, msg):
-  prefixs = ["Rachel, ", "rachel, ","Rei, ", "rei, "]
 
-  return commands.when_mentioned_or(*prefixs)(bot, msg)
+    if(os.environ["debug"] == "True"):
+        prefixs = ["test, ", "rei-test, ", "rtest, ", "rt, "]        
+    else:
+        prefixs = ["Rachel, ", "rachel, ","Rei, ", "rei, "]
+
+    return commands.when_mentioned_or(*prefixs)(bot, msg)
 
 intents = discord.Intents.all()#(messages=True, members=True, guilds=True)
 
