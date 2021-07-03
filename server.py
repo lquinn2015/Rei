@@ -67,7 +67,7 @@ server.known_users_by_name = {
   "emmy":660669670675841044
 }
 
-Debug = False
+Debug = os.environ["debug"]
 
 if Debug:
   ###########DEBUG_SERVER_SPECFIC_###############################################################
