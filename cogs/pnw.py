@@ -73,26 +73,32 @@ class pwn(commands.Cog):
       return
 
     args = ctx.message.content.split()[2:]
-    if not ( ("<" in ctx.message.content) and len(args) == 1):
-      await ctx.send("Sorry please do rei, lookup @member ")
-      return 
+    if len(args) != 1:
+      if (not ("<" in ctx.message.content)) or (args[0].isnumeric() == False):
+        await ctx.send("Sorry please do rei, lookup @member or rei, lookup nationid")
+        return
+    else:
+      await ctx.send("Sorry please do rei, lookup @member or rei, lookup nationid")
+      return
 
-    if("!" not in args[0]):
+    if("!" not in args[0]) and len(str(args[0]) < 7):
       args[0] = args[0][0:2] + "!" + args[0][2:]
 
     record = await self.get_nationlink(args[0])
-    if record is None:
+    if len(record) == 0:
       return await ctx.send("I'm not sure i'm really sorry :(")
-
-    memId = int(args[0][3:-1])
+    
+    memId = int(record[0]["id"][3:-1])
     member = self.bot.get_user(memId)
 
     member = discord.utils.find(lambda m: m.id == memId, ctx.message.guild.members)
     name = member.nick
     if name is None:
       name = member.name
-    await ctx.send("I found " + str(name) + " to be " + str(record))
+    await ctx.send("I found " + str(name) + " to be " + str(record["link"]))
 
+    
+    
   @commands.command(
     name='purgewars'
   )
@@ -457,8 +463,9 @@ class pwn(commands.Cog):
     if cursor.count() == 0:
       return None
     for player in cursor:
-      return player["link"]
+      return player
     return None
+  
 
   async def insert_nationlink(self, player, nationlink):
     user = {"id":player, "link":nationlink}
